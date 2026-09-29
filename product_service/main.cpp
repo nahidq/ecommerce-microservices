@@ -5,17 +5,7 @@
 #include <stdexcept>
 #include <string>
 
-// Reads one environment variable and fails loudly when it is missing,
-// so a misconfigured service dies at startup instead of on first request.
-static std::string require_env(const char* name)
-{
-    const char* value = std::getenv(name);
-    if (value == nullptr || *value == '\0')
-    {
-        throw std::runtime_error(std::string("Missing environment variable: ") + name);
-    }
-    return std::string(value);
-}
+
 
 static std::string build_connection_string()
 {
