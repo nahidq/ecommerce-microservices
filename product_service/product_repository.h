@@ -10,7 +10,7 @@ class ProductRepository
 public:
     explicit ProductRepository(ConnectionPool& pool);
     std::vector<Product> get_products();
-    std::optional<Product> fet_product_by_id(long long id);
+    std::optional<Product> get_product_by_id(long long id);
 private:
     ConnectionPool& pool_;
 

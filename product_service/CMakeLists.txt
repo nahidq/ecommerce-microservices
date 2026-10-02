@@ -16,7 +16,11 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(Crow)
 add_executable(product_service
-   main.cpp)
+   main.cpp
+   config.cpp 
+   db.cpp 
+   product_repository.cpp
+   product_routes.cpp)
 target_link_libraries(product_service PRIVATE Crow::Crow)
 target_link_libraries(product_service PRIVATE  PkgConfig::PQXX)
 target_precompile_headers(product_service PRIVATE <crow.h>)
