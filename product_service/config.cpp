@@ -1,6 +1,6 @@
 #include "config.h"
 #include <stdexcept>
-#include <cstdlib>
+
 
 // Reads one environment variable and fails loudly when it is missing,
 // so a misconfigured service dies at startup instead of on first request.

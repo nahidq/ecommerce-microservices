@@ -56,3 +56,15 @@ std::optional<Product> ProductRepository::get_product_by_id(long long id)
     }
     return read_product(rows[0]);
 }
+Product ProductRepository::create(const Product& product)
+{
+    PooledConnection conn = pool_.acquire();
+    pqxx::work tx(conn.get());
+    pqxx::row row = tx.exec_params1(
+        "INSERT INTO product_schema.products (sku, name, description, price, stock_quantity) "
+        "VALUES ($1, $2, $3, $4, $5) "
+        "RETURNING id, sku, name, description, price, stock_quantity ",
+        product.sku, product.name, product.description, product.price, product.stock_quantity);
+        tx.commit();
+        return read_product(row);
+}
