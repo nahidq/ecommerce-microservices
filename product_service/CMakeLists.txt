@@ -5,18 +5,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
+option(BUILD_TESTS "Build unit tests" ON)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(PQXX REQUIRED IMPORTED_TARGET libpqxx)
 include(FetchContent)
-enable_testing()
 
-FetchContent_Declare(
-   googletest
-   GIT_REPOSITORY https://github.com/google/googletest.git
-   GIT_TAG v1.14.0
-   GIT_SHALLOW TRUE
-)
-FetchContent_MakeAvailable(googletest)
 FetchContent_Declare(
    Crow
    GIT_REPOSITORY https://github.com/CrowCpp/Crow.git
@@ -40,7 +33,22 @@ target_link_libraries(product_lib
     PRIVATE product_lib
 )
 target_precompile_headers(product_lib PRIVATE <crow.h>)
-add_executable(product_tests tests/validation_test.cpp)
-target_link_libraries(product_tests PRIVATE product_lib GTest::gtest_main)
-include(GoogleTest)
-gtest_discover_tests(product_tests)
+
+if(BUILD_TESTS)
+    enable_testing()
+
+    FetchContent_Declare(
+   googletest
+   GIT_REPOSITORY https://github.com/google/googletest.git
+   GIT_TAG v1.14.0
+   GIT_SHALLOW TRUE
+)
+    FetchContent_MakeAvailable(googletest)
+
+    add_executable(product_tests tests/validation_test.cpp)
+    target_link_libraries(product_tests PRIVATE product_lib GTest::gtest_main)
+
+    include(GoogleTest)
+    gtest_discover_tests(product_tests)
+
+endif()
