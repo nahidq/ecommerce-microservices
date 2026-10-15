@@ -20,6 +20,20 @@ CREATE TABLE product_schema.products (
     created_at     TIMESTAMPTZ    NOT NULL DEFAULT now(),
     updated_at     TIMESTAMPTZ    NOT NULL DEFAULT now()
 );
+CREATE TYPE product_schema.reservation_status AS ENUM ('reserved', 'released');
+
+CREATE TABLE product_schema.reservations(
+
+    reservation_id     TEXT,
+    product_id         BIGINT,
+    status          product_schema.reservation_status NOT NULL DEFAULT 'reserved',
+    quantity       INTEGER NOT NULL CHECK (quantity > 0),
+    created_at     TIMESTAMPTZ     NOT NULL DEFAULT now(),
+    released_at TIMESTAMPTZ,
+    PRIMARY KEY (reservation_id, product_id)
+
+
+);
 
 -- Keeps updated_at correct no matter which query changes the row.
 CREATE FUNCTION product_schema.set_updated_at() RETURNS TRIGGER AS $$
